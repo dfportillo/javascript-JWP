@@ -1,0 +1,16 @@
+.page-content {
+    display: flex;
+    flex-direction: row;
+    margin: 2px 2px 10px  10px;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.demo-list-item {
+    width: 300px;
+  }
+
+#productos {
+    width: 200px;
+}
+
