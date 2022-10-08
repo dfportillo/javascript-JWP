@@ -89,24 +89,24 @@ function crearItem({ id, nombre, cantidad, precio }) {
  *      del ul provistos por MaterialDesign con componentHandler.upgradeElements()
  */
 function renderItems(items) {
-    let ul = document.querySelector("#ul_lista");
-    // Borrar los elementos actuales
-    ul.innerHTML = "";
-  
-    // Cargar los elementos de la lista
-    items.forEach(function (producto, indice) {
-      ul.appendChild(
-        crearItem({
-          id: indice,
-          nombre: producto.nombre,
-          cantidad: producto.cantidad,
-          precio: producto.precio,
-        })
-      );
-    });
-    // Actualizar los estilos de MaterialDesign
-    componentHandler.upgradeElements(ul);
-  }
+  let ul = document.querySelector("#ul_lista");
+  // Borrar los elementos actuales
+  ul.innerHTML = "";
+
+  // Cargar los elementos de la lista
+  items.forEach(function (producto, indice) {
+    ul.appendChild(
+      crearItem({
+        id: indice,
+        nombre: producto.nombre,
+        cantidad: producto.cantidad,
+        precio: producto.precio,
+      })
+    );
+  });
+  // Actualizar los estilos de MaterialDesign
+  componentHandler.upgradeElements(ul);
+}
 
 
 ///////////////////////////////// EVENTOS ///////////////////////////////////////////
@@ -131,3 +131,18 @@ btnBorrar.addEventListener("click", () => {
   items = [];
   renderItems(items);
 });
+
+
+///////////////////////////////// SERVICE WOKER ///////////////////////
+
+function registrarServiceWorker(url) {
+  if ("serviceWorker" in navigator) { //! verificamos que el navegador pueda correr un service worker
+    navigator.serviceWorker.register(url)// este metodo nos devuelve una promesa
+    .then (registracion => {
+      console.info("service worker instalado correctamente" , registracion.scope); // veremos el scope donde esta instalado
+    })
+    .catch(error => {console.error(error)});  
+  };
+};
+
+registrarServiceWorker("./sw.js")
