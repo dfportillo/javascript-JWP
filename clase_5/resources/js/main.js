@@ -1,10 +1,12 @@
+console.log("SuperLista");
+
 ///////////////////////////////// OBJETOS Y VARIABLES ///////////////////////////////
 let items = [];
 const btnAgregar = document.querySelector("#btn-entrada-producto");
 const btnBorrar = document.querySelector("#btn-borrar-productos");
 const btnGuardar = document.querySelector("#btn-storage-guardar");
-const btnLimpiar = document.querySelector('#btn-storage-limpiar');
-const btnCargar = document.querySelector('#btn-storage-cargar')
+const btnCargar = document.querySelector("#btn-storage-cargar");
+const btnLimpiar = document.querySelector("#btn-storage-limpiar");
 
 ///////////////////////////////// FUNCIONES /////////////////////////////////////////
 /**
@@ -109,6 +111,33 @@ function renderItems(items) {
   componentHandler.upgradeElements(ul);
 }
 
+function guardar(items) {
+  localStorage.setItem("SuperLista_Items", JSON.stringify(items));
+}
+
+function cargar() {
+  let storage = localStorage.getItem("SuperLista_Items");
+  if (storage) {
+    return JSON.parse(storage);
+  }
+  return false; // Si no hay datos guardados, retorna 'false'
+}
+
+function limpiar() {
+  localStorage.removeItem("SuperLista_Items");
+}
+
+function registrarServiceWorker(url) {
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker
+      .register(url)
+      .then((registracion) => {
+        console.log("SW registrado correctamente", registracion.scope);
+        main.dispatchEvent(new Event("serviceWorkerRegistrado"));
+      })
+      .catch((error) => console.log(error));
+  }
+}
 
 ///////////////////////////////// EVENTOS ///////////////////////////////////////////
 btnAgregar.addEventListener("click", () => {
@@ -133,62 +162,27 @@ btnBorrar.addEventListener("click", () => {
   renderItems(items);
 });
 
-
-///////////////////////////////// SERVICE WOKER ///////////////////////
-
-function registrarServiceWorker(url) {
-  if ("serviceWorker" in navigator) { //! verificamos que el navegador pueda correr un service worker
-    navigator.serviceWorker.register(url)// este metodo nos devuelve una promesa
-      .then((registracion) => {
-        console.info("service worker instalado correctamente", registracion.scope); // veremos el scope donde esta instalado
-      })
-      .catch((error) => console.log(error));
-  };
-};
-
-registrarServiceWorker("./sw.js")
-
-//////////////////////////GUARDAR PRODUCTOS EN LOCAL STORAGE/////////////////////////////////////////////////////
-
-
-function cargar() {
-  let l_storage = localStorage.getItem('super_lista_items')
-  if (l_storage) {
-    return JSON.parse(l_storage);
-  }
-  return false //! si no hay datos retorna false
-}
-
-function guardar(items) {
-  localStorage.setItem('super_lista_items', JSON.stringify(items))
-}
-
-function limpiar() {
-  localStorage.removeItem('super_lista_items');
-    items = [];
-    renderItems(items)
-}
-
 document.addEventListener("DOMContentLoaded", () => {
-  registrarServiceWorker();
-  if (cargar() && confirm('desea guardar los productos actuales?')) {
-    items = cargar();
-    renderItems(items);
-  }
-})
+  registrarServiceWroker();
+
+  items = cargar();
+  renderItems(items);
+});
 
 btnGuardar.addEventListener("click", () => {
   guardar(items);
 });
 
-btnLimpiar.addEventListener('click', () => {
-  limpiar();
-})
-
-btnCargar.addEventListener("click" , () => {
-  if(cargar()){
-    items = cargar ();
+btnCargar.addEventListener("click", () => {
+  if (cargar()) {
+    items = cargar();
     renderItems(items);
+  } else {
+    alert("No hay items guardados");
   }
 });
 
+btnLimpiar.addEventListener("click", () => {
+  limpiar(); // Limpia el Storage
+  location.reload(); // Recarga la pagina
+});

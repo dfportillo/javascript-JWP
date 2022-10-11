@@ -152,15 +152,31 @@ registrarServiceWorker("./sw.js")
 
 
 function cargar() {
-  let l_storage = localStorage.getItem('super_lista_items')
-  if (l_storage) {
-    return JSON.parse(l_storage);
-  }
-  return false //! si no hay datos retorna false
+  // let l_storage = localStorage.getItem('super_lista_items')
+  // if (l_storage) {
+  //   return JSON.parse(l_storage);
+  // }
+  // return false //! si no hay datos retorna false
+
+  return fetch('https://630583c7697408f7edc69ebc.mockapi.io/js_AWP')
+    .then((response) => response.json())
+    .then((data) => {
+      if(data){
+        return data
+      } else {
+        return false
+      }
+    })
+    .catch(() => {return false})
 }
 
 function guardar(items) {
-  localStorage.setItem('super_lista_items', JSON.stringify(items))
+  const options = { method: 'PUT', body: JSON.stringify(items), headers: { 'Content-type': 'application/json; charset=UTF-8' } }
+  fetch('https://630583c7697408f7edc69ebc.mockapi.io/js_AWP' ,options)
+  .then(response => response.json())
+  .then(json => { id.value = json.id })
+  .catch(error => console.error(`se ha producido el siguiente error: ${error}`))
+  // console.log (JSON.stringify(items))
 }
 
 function limpiar() {
@@ -171,10 +187,13 @@ function limpiar() {
 
 document.addEventListener("DOMContentLoaded", () => {
   registrarServiceWorker();
-  if (cargar() && confirm('desea guardar los productos actuales?')) {
-    items = cargar();
-    renderItems(items);
-  }
+    cargar()
+      .then (res => {
+        if (res && confirm('esta seguro que desea cargar datos desde la API WEB ?')){
+          items = res ; 
+          renderItems (items);
+        }
+      })
 })
 
 btnGuardar.addEventListener("click", () => {
@@ -186,9 +205,11 @@ btnLimpiar.addEventListener('click', () => {
 })
 
 btnCargar.addEventListener("click" , () => {
-  if(cargar()){
-    items = cargar ();
-    renderItems(items);
-  }
+  //! debido a que ahora "cargar()" es una promesa no puede ser llamada asi
+  cargar()
+    .then (res => {
+      items = res ; 
+      renderItems (items)
+    })
 });
 
