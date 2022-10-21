@@ -1,4 +1,3 @@
-console.log("SuperLista");
 
 ///////////////////////////////// OBJETOS Y VARIABLES ///////////////////////////////
 let items = [];
@@ -45,7 +44,7 @@ function crearItem({ id, nombre, cantidad, precio }) {
 
   const li = document.createElement("li");
   li.classList.add("mdl-list__item");
-
+  
   const spanIcon = document.createElement("span");
   spanIcon.classList.add("mdl-list__item-primary-content", "w-10");
   spanIcon.innerHTML = '<i class="material-icons">shopping_cart</i>';
@@ -75,6 +74,18 @@ function crearItem({ id, nombre, cantidad, precio }) {
       precio
     )
   );
+
+  ////////////////////////////////////////////////////////////////////////////////////////
+  const spanBorrar = document.createElement("span")
+  spanBorrar.classList.add("mdl-list__item-primary-content", "w-10")
+  spanBorrar.innerHTML = `
+                          <button type="button" onClick="eliminarDiv(this)" >
+                          <i class="material-icons">delete</i>
+                          </button>
+                         `
+  li.appendChild(spanBorrar)
+
+  /////////////////////////////////////////////////////////////////////////////////////////
 
   return li;
 }
@@ -132,8 +143,7 @@ function registrarServiceWorker(url) {
     navigator.serviceWorker
       .register(url)
       .then((registracion) => {
-        console.log("SW registrado correctamente", registracion.scope);
-        main.dispatchEvent(new Event("serviceWorkerRegistrado"));
+        // console.log("SW registrado correctamente", registracion.scope);
       })
       .catch((error) => console.log(error));
   }
@@ -163,7 +173,7 @@ btnBorrar.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  registrarServiceWroker();
+  registrarServiceWorker("./serviceWorker.js");
 
   items = cargar();
   renderItems(items);
@@ -186,3 +196,12 @@ btnLimpiar.addEventListener("click", () => {
   limpiar(); // Limpia el Storage
   location.reload(); // Recarga la pagina
 });
+
+///////////////////////// funcion eliminar ///////////////////////////////////////
+
+// La función recibe el elemento button y a partir de ahí se busca el div donde esta contenido por un ID para eliminarlo
+function eliminarDiv(e){
+  e.closest('.mdl-list__item').remove(); // Busca el elemento padre mas cercano con la class .mdl-list__itemº
+  
+  //e.parentNode.remove(); Si el div es el inmediatamente superior al botón podria ser mas facil con esta linea. 
+}
