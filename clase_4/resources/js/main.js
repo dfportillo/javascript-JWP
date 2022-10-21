@@ -171,12 +171,15 @@ function cargar() {
 }
 
 function guardar(items) {
-  const options = { method: 'PUT', body: JSON.stringify(items), headers: { 'Content-type': 'application/json; charset=UTF-8' } }
-  fetch('https://630583c7697408f7edc69ebc.mockapi.io/js_AWP' ,options)
-  .then(response => response.json())
-  .then(json => { id.value = json.id })
-  .catch(error => console.error(`se ha producido el siguiente error: ${error}`))
-  // console.log (JSON.stringify(items))
+
+  let itemsObj = Object.fromEntries(items)
+
+  // const options = { method: 'PUT', body: JSON.stringify(items), headers: { 'Content-type': 'application/json; charset=UTF-8' } }
+  // fetch('https://630583c7697408f7edc69ebc.mockapi.io/js_AWP' ,options)
+  // .then(response => response.json())
+  // .then(json => { id.value = json.id })
+  // .catch(error => console.error(`se ha producido el siguiente error: ${error}`))
+  console.log (itemsObj)
 }
 
 function limpiar() {
