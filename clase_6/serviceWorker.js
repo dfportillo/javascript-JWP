@@ -1,32 +1,39 @@
-const listadoDeARchivosLocales = [
-    'lib/js/material.min.js',
-    'lib/css/icons.css',
-    'lib/css/material.indigo-pink.min.css',
-    'resources/css/estilos.css',
-    'manifest.json'
-];
+importScripts('./resources/js/cache-strategies.js')
 
 self.addEventListener("install", (e) => {
-    // preCargar cache
-    // e.waitUntil(promesaDeCargarCache);
+
+const cachePromisesAll = Promise.all([ // metodo para poder realizar varias promesas al mismo tiempo
+    
+    create_cache(CACHE_INMUTABLE_NOMBRE,CACHE_INMUTABLE_ARCHIVOS),
+    create_cache(CACHE_ESTATICO_NOMBRE,CACHE_ESTATICO_ARCHIVOS)
+
+]);
+
+    e.waitUntil(cachePromisesAll);
+    console.log("SW Instalado");
 });
 
-self.addEventListener("activate", (e) => {
-    // actualizar esquemas de BD
-    // borrar caches
-    // e.waitUntil(borrarPromesasDeCache);
-
+self.addEventListener("activate", (e) => {//https://developer.mozilla.org/en-US/docs/Web/API/Clients/claim
+    const activatePromise = clients.claim()
+            .then(caches.keys()
+                .then(cachesKeys => {
+                    if(cachesKeys.includes(CACHE_DINAMICO_NOMBRE)){
+                        return caches.delete(CACHE_DINAMICO_NOMBRE);
+                    };
+                }));
+    e.waitUntil(activatePromise);
 });
 
 self.addEventListener("fetch", (e) => {
-    let archivioLocal = listadoDeARchivosLocales.find(archivo => e.request.url.endsWith(archivo))
-    if(archivioLocal){
-        e.respondWith(fetch('./' + archivioLocal))
-    }
+    e.respondWith(cacheFirst(e.request));
+//   e.respondWith(networkFirst(e.request));
+//   e.respondWith(staleWhileRevalidate(e.request));
 });
 
-self.addEventListener("push", (e)=>{
-    console.log('notificacion push enviada', e)
+self.addEventListener("sync", (e) => {
+    console.log("Notificacion SYNC enviada", e);
 });
 
-// continua en clase 6
+self.addEventListener("push", (e) => {
+    console.log("Notificacion PUSH enviada", e);
+});

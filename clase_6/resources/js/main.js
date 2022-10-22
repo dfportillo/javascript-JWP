@@ -173,10 +173,13 @@ btnBorrar.addEventListener("click", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  registrarServiceWorker("./serviceWorker.js");
+  // registrarServiceWorker("./serviceWorker.js");
+  // desregistrarServiceWorker();
 
-  items = cargar();
-  renderItems(items);
+  if(cargar() && confirm('desea cargar elementos guardados?')){
+    items = cargar();
+    renderItems(items);
+  }
 });
 
 btnGuardar.addEventListener("click", () => {
