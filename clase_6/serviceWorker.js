@@ -25,9 +25,9 @@ self.addEventListener("activate", (e) => {//https://developer.mozilla.org/en-US/
 });
 
 self.addEventListener("fetch", (e) => {
-    e.respondWith(cacheFirst(e.request));
+    // e.respondWith(cacheFirst(e.request));
 //   e.respondWith(networkFirst(e.request));
-//   e.respondWith(staleWhileRevalidate(e.request));
+  e.respondWith(staleWhileRevalidate(e.request));
 });
 
 self.addEventListener("sync", (e) => {

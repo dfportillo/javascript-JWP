@@ -73,3 +73,22 @@ function networkFirst (request) {
         return caches.match(request)
     });
 };
+
+//obsoleto mientras se revalida 
+//la primera vez cachea la respuesta y la cachea de una vez 
+//despues las proximas solicitudes las trae del cache y en background las actualiza
+
+function staleWhileRevalidate(request){
+    return caches.match(request).then(matchRequest => {
+        if(matchRequest){
+            fetch(request).then(online_res => {
+                caches.open(CACHE_DINAMICO_NOMBRE).then(cacheDinamico =>{
+                    cacheDinamico.put(request,online_res);
+                });
+            });
+            return matchRequest;
+        } else {
+            return fetchAndCache(request);
+        };
+    });
+};
