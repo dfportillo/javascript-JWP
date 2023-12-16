@@ -1,0 +1,21 @@
+{
+  "name": "clase_7",
+  "version": "1.0.0",
+  "description": "clase 7 del curso de PWA en EI (notificaciones push)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node .",
+    "start:watch": "nodemon ."
+  },
+  "author": "Daniel Portillo",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2",
+    "web-push": "^3.5.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.3",
+    "nodemon": "^2.0.20"
+  }
+}

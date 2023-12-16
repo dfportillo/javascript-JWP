@@ -1,10 +1,13 @@
+// const { LocalSeeOutlined } = require("@mui/icons-material");
+
 ///////////////////////////////// OBJETOS Y VARIABLES ///////////////////////////////
 let items = [];
 const btnAgregar = document.querySelector("#btn-entrada-producto");
 const btnBorrar = document.querySelector("#btn-borrar-productos");
 const btnGuardar = document.querySelector("#btn-storage-guardar");
 const btnLimpiar = document.querySelector('#btn-storage-limpiar');
-const btnCargar = document.querySelector('#btn-storage-cargar')
+const btnCargar = document.querySelector('#btn-storage-cargar');
+const productAPI = 'https://65426214f0b8287df10008b4.mockapi.io/productos';
 
 ///////////////////////////////// FUNCIONES /////////////////////////////////////////
 /**
@@ -148,55 +151,74 @@ function registrarServiceWorker(url) {
 
 registrarServiceWorker("./sw.js")
 
+
 //////////////////////////GUARDAR PRODUCTOS EN LOCAL STORAGE/////////////////////////////////////////////////////
 
 
-function cargar() {
-  // let l_storage = localStorage.getItem('super_lista_items')
-  // if (l_storage) {
-  //   return JSON.parse(l_storage);
-  // }
-  // return false //! si no hay datos retorna false
+// function cargar() {
+//   // let l_storage = localStorage.getItem('super_lista_items')
+//   // if (l_storage) {
+//   //   return JSON.parse(l_storage);
+//   // }
+//   // return false //! si no hay datos retorna false
 
-  return fetch('https://630583c7697408f7edc69ebc.mockapi.io/js_AWP')
-    .then((response) => response.json())
-    .then((data) => {
-      if(data){
-        return data
-      } else {
-        return false
-      }
-    })
-    .catch(() => {return false})
-}
+//   return fetch('https://630583c7697408f7edc69ebc.mockapi.io/js_AWP')
+//     .then((response) => response.json())
+//     .then((data) => {
+//       if(data){
+//         return data
+//       } else {
+//         return false
+//       }
+//     })
+//     .catch(() => {return false})
+// }
 
 function guardar(items) {
+  // localStorage.setItem('super_lista_items',JSON.stringify(items))
 
-  let itemsObj = Object.fromEntries(items)
+  //* mediante API
 
-  // const options = { method: 'PUT', body: JSON.stringify(items), headers: { 'Content-type': 'application/json; charset=UTF-8' } }
-  // fetch('https://630583c7697408f7edc69ebc.mockapi.io/js_AWP' ,options)
-  // .then(response => response.json())
-  // .then(json => { id.value = json.id })
-  // .catch(error => console.error(`se ha producido el siguiente error: ${error}`))
-  console.log (itemsObj)
+  fetch(productAPI, {
+    method: 'POST',
+    body: JSON.stringify(items)
+  })
+    .then(res => {
+      alert('carrito guardado en API'); //! queda pendiente hacer el POST con el API
+    });
 }
 
 function limpiar() {
   localStorage.removeItem('super_lista_items');
-    items = [];
-    renderItems(items)
+  items = [];
+  renderItems(items)
 }
+function cargar() {
+  // let storage = localStorage.getItem('super_lista_items');
+  // if(storage){
+  //   const loadedItems = JSON.parse(storage);
+  //   items = loadedItems;
+  //   renderItems(items);
+  // }
+  // return false //! se termina arriba si existe "super_local_storage"
+
+  fetch(productAPI)
+    .then(res => res.json())
+    .then(data => {
+      if (data) {
+        items = data;
+        renderItems(data)
+      }
+      return false
+    })
+    .catch(err => console.error(err))
+};
 
 document.addEventListener("DOMContentLoaded", () => {
   registrarServiceWorker();
-    cargar()
-      .then (res => {
-        if (res && confirm('esta seguro que desea cargar datos desde la API WEB ?')){
-          items = res ; 
-          renderItems (items);
-        }
-      })
+  if (confirm("tiene items guardados en el local storage, desea cargarlos?")) {
+    cargar();
+  }
 })
 
 btnGuardar.addEventListener("click", () => {
@@ -207,12 +229,10 @@ btnLimpiar.addEventListener('click', () => {
   limpiar();
 })
 
-btnCargar.addEventListener("click" , () => {
-  //! debido a que ahora "cargar()" es una promesa no puede ser llamada asi
+btnCargar.addEventListener("click", () => {
   cargar()
-    .then (res => {
-      items = res ; 
-      renderItems (items)
-    })
 });
 
+window.addEventListener('load', (e) => { // el obj window es la pestaña del navegador
+  alert('la pagina ha sido cargada')
+})

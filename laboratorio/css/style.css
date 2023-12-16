@@ -1,0 +1,61 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header{
+    background-color: rgb(96, 183, 201);
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.input-tag{
+    width: 100%;
+    display: flex;
+    padding: 0 0.5em;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.mdl-textfield{
+    width: 40%;
+}
+
+#btn_add{
+    width: 2.8em;
+    height: 2.8em;
+    margin: 0 1em;
+    border: none;
+    border-radius: 100%;
+    background-color: lightblue;
+}
+
+/* css btn cantidad */
+
+#btn_amount{
+    width: 25%;
+    height: 80%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: lightgray;
+    border-radius: 0.4em;
+}
+
+
+/*btn delete element*/
+
+.btndel_element-box{
+    width: 1.8em;
+    height: 1.8em;
+    display: grid;
+    place-content: center;
+    margin-left: 0.5em;
+    border-radius: 100%;
+    border: 1px;
+}
+

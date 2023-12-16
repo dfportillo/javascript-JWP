@@ -44,7 +44,7 @@ function crearItem({ id, nombre, cantidad, precio }) {
 
   const li = document.createElement("li");
   li.classList.add("mdl-list__item");
-  
+
   const spanIcon = document.createElement("span");
   spanIcon.classList.add("mdl-list__item-primary-content", "w-10");
   spanIcon.innerHTML = '<i class="material-icons">shopping_cart</i>';
@@ -200,8 +200,8 @@ btnLimpiar.addEventListener("click", () => {
 ///////////////////////// funcion eliminar ///////////////////////////////////////
 
 // La función recibe el elemento button y a partir de ahí se busca el div donde esta contenido por un ID para eliminarlo
-function eliminarDiv(e){
+function eliminarDiv(e) {
   e.closest('.mdl-list__item').remove(); // Busca el elemento padre mas cercano con la class .mdl-list__itemº
-  
+
   //e.parentNode.remove(); Si el div es el inmediatamente superior al botón podria ser mas facil con esta linea. 
 }

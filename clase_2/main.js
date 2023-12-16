@@ -19,7 +19,7 @@ function agregarProductoCarrito () {
 }
 
 function renderizarLista() {
-    listaProductos.replaceChildren(); //? sirve para cambiar a los hijos del "ul"
+    listaProductos.replaceChildren();
     for (let i of carrito.keys()) {
         const liEl = document.createElement("li");
         liEl.classList.add("mdl-list__item");
